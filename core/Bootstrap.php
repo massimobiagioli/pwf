@@ -1,5 +1,10 @@
 <?php
 
 require __DIR__ . '/../vendor/autoload.php';
-        
-echo "it works from bootstrap";
+
+// Load .env
+$dotenv = new Dotenv\Dotenv(__DIR__ . '/..');
+$dotenv->load();
+
+$env = getenv('ENVIRONMENT');
+echo "ENVIRONMENT: $env";
