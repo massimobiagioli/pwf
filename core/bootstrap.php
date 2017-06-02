@@ -57,15 +57,14 @@ $conf = loadConfigurations();
 /*
  * Logger
  */
-function initLogger() {
+function initLogger($conf) {
     $log = new Logger('name');
-    
-    // TODO: leggere da file di configurazione
-    $log->pushHandler(new StreamHandler('/tmp/pwf.log', Logger::WARNING));
+    $log->pushHandler(new StreamHandler($conf['loggerPath'],
+            constant("Monolog\Logger::{$conf['loggerLevel']}")));
     
     return $log;
 }
-$log = initLogger();
+$log = initLogger($conf);
 
 /*
  * Init Slim Application
