@@ -1,15 +1,70 @@
 <?php
 
-require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
-// Register ErrorHandler
-$whoops = new \Whoops\Run;
-$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-$whoops->register();
+/*
+ * Register Error Handler
+ */
+function initErrorHandler() {
+    $whoops = new \Whoops\Run;
+    $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+    $whoops->register();
+    
+    return $whoops;
+}
+$whoops = initErrorHandler();
 
-// Load .env
-$dotenv = new Dotenv\Dotenv(__DIR__ . '/..');
-$dotenv->load();
+/*
+ * Load .env
+ */
+function loadDotEnv() {
+    $dotenv = new Dotenv\Dotenv(__DIR__ . '/..');
+    $dotenv->load();    
+    
+    return $dotenv;
+}
+$dotEnv = loadDotEnv();
 
-$env = getenv('ENVIRONMENT');
-echo "ENVIRONMENT: $env";
+/*
+ * Load configurations
+ */
+function loadConfigurations() {
+    $configFiles = [];
+    
+    // Common configuration files
+    $commonConfigFiles = glob(__DIR__ . '/../app/config/*.php');
+    foreach ($commonConfigFiles as $commonConfigFile) {
+        $configFiles[] = $commonConfigFile;
+    }
+    
+    // Modules configuration files
+    $modulesConfigFiles = glob(__DIR__ . '/../app/modules/*/config/*.php');
+    foreach ($modulesConfigFiles as $modulesConfigFile) {
+        $configFiles[] = $modulesConfigFile;
+    }
+    
+    // Load all configuration files
+    $conf = new Noodlehaus\Config($configFiles);
+    
+    return $conf;
+}
+$conf = loadConfigurations();
+
+/*
+ * Init Slim Application
+ */
+$app = new \Slim\App;
+
+// Load common routes
+$commonRoutes = glob(__DIR__ . '/../app/routes/*.php');
+foreach ($commonRoutes as $route) {
+    require_once $route;
+}
+
+// Load modules routes
+$modulesRoutes = glob(__DIR__ . '/../app/modules/*/routes/*.php');
+foreach ($modulesRoutes as $route) {
+    require_once $route;
+}
+
+$app->run();
