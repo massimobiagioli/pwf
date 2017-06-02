@@ -2,6 +2,10 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use Noodlehaus\Config;
+
 /*
  * Register Error Handler
  */
@@ -44,11 +48,24 @@ function loadConfigurations() {
     }
     
     // Load all configuration files
-    $conf = new Noodlehaus\Config($configFiles);
+    $conf = new Config($configFiles);
     
     return $conf;
 }
 $conf = loadConfigurations();
+
+/*
+ * Logger
+ */
+function initLogger() {
+    $log = new Logger('name');
+    
+    // TODO: leggere da file di configurazione
+    $log->pushHandler(new StreamHandler('/tmp/pwf.log', Logger::WARNING));
+    
+    return $log;
+}
+$log = initLogger();
 
 /*
  * Init Slim Application
