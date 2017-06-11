@@ -39,5 +39,3 @@ $app->group('/auth', function () use ($app, $conf) {
     });
     
 });
-
-
