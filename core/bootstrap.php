@@ -67,6 +67,14 @@ function initLogger($conf) {
 $log = initLogger($conf);
 
 /*
+ * Templates
+ */
+$loader = new Twig_Loader_Filesystem('../app/templates');
+$twig = new Twig_Environment($loader, array(
+    'cache' => '../app/templates_cache'
+));
+
+/*
  * Init Slim Application
  */
 $app = new \Slim\App;

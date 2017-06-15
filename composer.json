@@ -15,7 +15,8 @@
         "hassankhan/config": "^0.10.0",
         "monolog/monolog": "^1.22",
         "tuupola/slim-jwt-auth": "^2.3",
-        "ramsey/uuid": "^3.6"
+        "ramsey/uuid": "^3.6",
+        "twig/twig": "^2.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.1"

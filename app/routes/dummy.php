@@ -11,3 +11,8 @@ $app->get('/dummy', function (Request $request, Response $response) use ($conf) 
     return $response;
 });
 
+$app->get('/tmp1', function (Request $request, Response $response) use ($twig) {
+    $template = $twig->load('index.html');
+    echo $template->render(['chiave' => 'valore']);
+});
+
