@@ -70,8 +70,16 @@ $log = initLogger($conf);
  * Templates
  */
 function initTemplateEngine() {
-    //TODO: definire templates per i moduli
-    $loader = new Twig_Loader_Filesystem(['../app/templates']);
+    $templates = ['../app/templates'];
+    
+    // Modules templates
+    $modulesTemplates = glob(__DIR__ . '/../app/modules/*/templates/');
+    foreach ($modulesTemplates as $moduleTemplate) {
+        $templates[] = $moduleTemplate;
+    }
+
+    // Init loader
+    $loader = new Twig_Loader_Filesystem($templates);
     $twig = new Twig_Environment($loader, array(
         'cache' => '../app/templates_cache'
     ));
