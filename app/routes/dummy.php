@@ -13,7 +13,17 @@ $app->get('/dummy', function (Request $request, Response $response) use ($conf) 
 
 $app->get('/tmp1', function (Request $request, Response $response) use ($twig) {
     $template = $twig->load('index.html');
-    echo $template->render(['chiave' => 'valore']);
+    $meta = [
+        [
+            'id' => 'meta-xxx',
+            'value' => 'asdf1234'
+        ],
+        [
+            'id' => 'meta-yyy',
+            'value' => 'zxcv9876'
+        ]
+    ];
+    echo $template->render(['chiave' => 'valore', 'meta' => $meta]);
 });
 
 $app->post('/controller', function (Request $request, Response $response) use ($twig) {
@@ -24,6 +34,14 @@ $app->post('/controller', function (Request $request, Response $response) use ($
             [
                 'name' => 'messages',
                 'content' => $template->renderBlock('messages', ['chiave1' =>'nuovoValore'])
+            ]
+        ],
+        'actions' => [
+            [
+                'name' => 'consoleLog',
+                'params' => [
+                    'message' => "Body: " . print_r($request->getParsedBody(), true)
+                ]
             ]
         ]
     ];
