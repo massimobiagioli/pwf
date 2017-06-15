@@ -16,3 +16,17 @@ $app->get('/tmp1', function (Request $request, Response $response) use ($twig) {
     echo $template->render(['chiave' => 'valore']);
 });
 
+$app->post('/controller', function (Request $request, Response $response) use ($twig) {
+    $template = $twig->load('index.html');
+    
+    $toReturn = [
+        'blocks' => [
+            [
+                'name' => 'messages',
+                'content' => $template->renderBlock('messages', ['chiave1' =>'nuovoValore'])
+            ]
+        ]
+    ];
+    
+    return json_encode($toReturn);
+});

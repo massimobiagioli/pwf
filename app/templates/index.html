@@ -4,4 +4,15 @@
 <div>
     <span>Chiave: </span>{{ chiave }}
 </div>
+
+<div>
+    <button onclick='serverManager.callServer({})'>TEST</button>
+</div>
+
+<div id="messages">
+    {% block messages %}
+    {{chiave1}}    
+    {% endblock %}
+</div>
+
 {% endblock %}
