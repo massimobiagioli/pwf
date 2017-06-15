@@ -25,4 +25,3 @@ serverManager.callServer = function(data) {
     
 };
 
-
