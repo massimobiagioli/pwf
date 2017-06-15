@@ -69,10 +69,15 @@ $log = initLogger($conf);
 /*
  * Templates
  */
-$loader = new Twig_Loader_Filesystem('../app/templates');
-$twig = new Twig_Environment($loader, array(
-    'cache' => '../app/templates_cache'
-));
+function initTemplateEngine() {
+    //TODO: definire templates per i moduli
+    $loader = new Twig_Loader_Filesystem(['../app/templates']);
+    $twig = new Twig_Environment($loader, array(
+        'cache' => '../app/templates_cache'
+    ));
+    return $twig;    
+}
+$twig = initTemplateEngine();
 
 /*
  * Init Slim Application
