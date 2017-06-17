@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
@@ -22,7 +22,7 @@ $whoops = initErrorHandler();
  * Load .env
  */
 function loadDotEnv() {
-    $dotenv = new Dotenv\Dotenv(__DIR__ . '/..');
+    $dotenv = new Dotenv\Dotenv(__DIR__ . '/../..');
     $dotenv->load();    
     
     return $dotenv;
@@ -36,13 +36,13 @@ function loadConfigurations() {
     $configFiles = [];
     
     // Common configuration files
-    $commonConfigFiles = glob(__DIR__ . '/../app/config/*.php');
+    $commonConfigFiles = glob(__DIR__ . '/../../app/config/*.php');
     foreach ($commonConfigFiles as $commonConfigFile) {
         $configFiles[] = $commonConfigFile;
     }
     
     // Modules configuration files
-    $modulesConfigFiles = glob(__DIR__ . '/../app/modules/*/config/*.php');
+    $modulesConfigFiles = glob(__DIR__ . '/../../app/modules/*/config/*.php');
     foreach ($modulesConfigFiles as $modulesConfigFile) {
         $configFiles[] = $modulesConfigFile;
     }
@@ -87,10 +87,18 @@ function initTemplateEngine() {
 }
 $twig = initTemplateEngine();
 
+// Init container
+$container = new \Slim\Container();
+
+// Register services
+$container['client'] = function ($container) {
+    return new \Core\Client\Client();
+};
+
 /*
  * Init Slim Application
  */
-$app = new \Slim\App;
+$app = new \Slim\App($container);
 
 // Load common routes
 $commonRoutes = glob(__DIR__ . '/../app/routes/*.php');

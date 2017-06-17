@@ -48,3 +48,10 @@ $app->post('/controller', function (Request $request, Response $response) use ($
     
     return json_encode($toReturn);
 });
+
+$app->get('/sing1', function (Request $request, Response $response) {
+    $this->client->clearMessages();
+    $this->client->addMessage('m1');
+    $this->client->addMessage('m2');
+    echo print_r($this->client->getMessages(), true);
+});
