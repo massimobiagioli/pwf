@@ -22,6 +22,13 @@ class ClientTest extends TestCase {
         $this->assertEmpty($this->client->getMessages());
     }
     
+    public function testClientMessage() {
+        $msg = ClientMessage::newClientMessage('dummy', 'chiave1', 'valore1');
+        $this->assertEquals('dummy', $msg->getType());
+        $this->assertEquals('chiave1', $msg->getKey());
+        $this->assertEquals('valore1', $msg->getValue());
+    }
+    
     public function testAddOneMessage() {
         $msg = ClientMessage::newClientMessage('dummy', 'chiave1', 'valore1');
         $this->client->addMessage($msg);

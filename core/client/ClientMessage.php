@@ -2,10 +2,27 @@
 
 namespace Core\Client;
 
+/**
+ * Messaggio da inviare al client
+ */
 class ClientMessage {
     
+    /**
+     * Tipo messaggio
+     * @var type string
+     */
     private $type;
+    
+    /**
+     * Chiave messaggio
+     * @var type  string
+     */
     private $key;
+    
+    /**
+     * Valore messaggio
+     * @var type mixed
+     */
     private $value;
     
     public function __construct() {
@@ -14,6 +31,13 @@ class ClientMessage {
         $this->value = '';
     }
     
+    /**
+     * Crea nuovo messaggio
+     * @param string $type Tipo
+     * @param string $key Chiave
+     * @param mixed $value Valore
+     * @return \Core\Client\ClientMessage
+     */
     public static function newClientMessage($type, $key, $value) {
         $clientMessage = new ClientMessage();
         $clientMessage->setType($type);
