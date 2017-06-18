@@ -5,9 +5,9 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use \Firebase\JWT\JWT;
 use \Ramsey\Uuid\Uuid;
 
-$app->group('/auth', function () use ($app, $conf) {
+$app->group('/auth', function () use ($app) {
 
-    $app->get('/login', function (Request $request, Response $response) use ($app, $conf) {
+    $app->get('/login', function (Request $request, Response $response) {
         $now = new DateTime();
         $future = new DateTime("now +2 hours");
         $jti = Uuid::uuid4();
@@ -26,8 +26,8 @@ $app->group('/auth', function () use ($app, $conf) {
             'scopes' => $scopes
         ];
         
-        $secret = $conf->get('jwt_secret');
-        $alg = $conf->get('jwt_alg');
+        $secret = $this->conf->get('jwt_secret');
+        $alg = $this->conf->get('jwt_alg');
         
         $data = [
             'token' => JWT::encode($payload, $secret, $alg)

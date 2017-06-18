@@ -7,27 +7,26 @@ use Monolog\Handler\StreamHandler;
 use Noodlehaus\Config;
 
 /*
+ * Load .env
+ */
+$dotenv = new Dotenv\Dotenv(__DIR__ . '/../..');
+$dotenv->load(); 
+
+/*
  * Register Error Handler
  */
 function initErrorHandler() {
     $whoops = new \Whoops\Run;
-    $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+    if (strtolower(getenv('ENVIRONMENT')) === 'production') {
+        // TODO: define error handler for production environment
+    } else {
+        $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+    }
     $whoops->register();
     
     return $whoops;
 }
 $whoops = initErrorHandler();
-
-/*
- * Load .env
- */
-function loadDotEnv() {
-    $dotenv = new Dotenv\Dotenv(__DIR__ . '/../..');
-    $dotenv->load();    
-    
-    return $dotenv;
-}
-$dotEnv = loadDotEnv();
 
 /*
  * Load configurations
@@ -52,7 +51,6 @@ function loadConfigurations() {
     
     return $conf;
 }
-$conf = loadConfigurations();
 
 /*
  * Logger
@@ -64,7 +62,6 @@ function initLogger($conf) {
     
     return $log;
 }
-$log = initLogger($conf);
 
 /*
  * Templates
@@ -85,14 +82,26 @@ function initTemplateEngine() {
     ));
     return $twig;    
 }
-$twig = initTemplateEngine();
 
-// Init container
+// Init App container
 $container = new \Slim\Container();
+
+// Disable Slim error handler
+unset($container['errorHandler']);
+unset($container['phpErrorHandler']);
 
 // Register services
 $container['client'] = function ($container) {
     return new \Core\Client\Client();
+};
+$container['config'] = function ($container) {
+    return loadConfigurations();
+};
+$container['log'] = function($container) {
+    return initLogger($container['config']);
+};
+$container['templateEngine'] = function($container) {
+    return initTemplateEngine();
 };
 
 /*
@@ -101,13 +110,13 @@ $container['client'] = function ($container) {
 $app = new \Slim\App($container);
 
 // Load common routes
-$commonRoutes = glob(__DIR__ . '/../app/routes/*.php');
+$commonRoutes = glob(__DIR__ . '/../../app/routes/*.php');
 foreach ($commonRoutes as $route) {
     require_once $route;
 }
 
 // Load modules routes
-$modulesRoutes = glob(__DIR__ . '/../app/modules/*/routes/*.php');
+$modulesRoutes = glob(__DIR__ . '/../../app/modules/*/routes/*.php');
 foreach ($modulesRoutes as $route) {
     require_once $route;
 }

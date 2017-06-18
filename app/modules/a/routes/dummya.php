@@ -8,7 +8,7 @@ $app->get('/dummya', function (Request $request, Response $response) {
     return $response;
 });
 
-$app->get('/tmp1a', function (Request $request, Response $response) use ($twig) {
-    $template = $twig->load('a_index.html');
+$app->get('/tmp1a', function (Request $request, Response $response) {
+    $template = $this->templateEngine->load('a_index.html');
     echo $template->render(['chiave' => 'valore-mod-a']);
 });
