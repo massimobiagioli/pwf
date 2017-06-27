@@ -2,6 +2,8 @@
 
 namespace Test\Unit;
 
+require_once __DIR__ . '/../../vendor/autoload.php';
+
 use PHPUnit\Framework\TestCase;
 use Core\Client\Client;
 use Core\Client\ClientMessage;
