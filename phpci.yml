@@ -1,5 +1,0 @@
-test:
-    php_unit:
-        config:
-            - "phpunit.xml"
-        path: "test"
